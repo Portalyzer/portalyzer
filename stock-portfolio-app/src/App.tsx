@@ -1,39 +1,40 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [rows, setRows] = useState([{ symbol: '', date: '', value: '' }])
+  const [rows, setRows] = useState([{ symbol: '', date: '', value: '', isEditable: true }])
 
-  const handleInputChange = (index: number, field: string, value: string) => {
+  const handleInputChange = (index: number, field: 'symbol' | 'date' | 'value', value: string) => {
     const updatedRows = [...rows]
-    updatedRows[index][field as keyof typeof updatedRows[number]] = value
+    updatedRows[index][field] = value
     setRows(updatedRows)
   }
 
   const addRow = () => {
-    setRows([...rows, { symbol: '', date: '', value: '' }])
+    setRows([...rows, { symbol: '', date: '', value: '', isEditable: true }])
   }
 
+  const toggleEdit = (index: number) => {
+    const updatedRows = [...rows]
+    updatedRows[index].isEditable = !updatedRows[index].isEditable
+    setRows(updatedRows)
+  }
 
   return (
     <>
-      <div>
-        
-      </div>
       <h1>Stock Portfolio</h1>
       <div>
         <table>
           <thead>
             <tr>
-              <th>Symbol</th>
+              <th>Stock</th>
               <th>Purchase Date</th>
               <th>Value of Purchase</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-              {rows.map((row, index) => (
+            {rows.map((row, index) => (
               <tr key={index}>
                 <td>
                   <input
@@ -42,6 +43,7 @@ function App() {
                     onChange={(e) =>
                       handleInputChange(index, 'symbol', e.target.value)
                     }
+                    disabled={!row.isEditable}
                   />
                 </td>
                 <td>
@@ -51,6 +53,7 @@ function App() {
                     onChange={(e) =>
                       handleInputChange(index, 'date', e.target.value)
                     }
+                    disabled={!row.isEditable}
                   />
                 </td>
                 <td>
@@ -60,7 +63,15 @@ function App() {
                     onChange={(e) =>
                       handleInputChange(index, 'value', e.target.value)
                     }
+                    disabled={!row.isEditable}
                   />
+                </td>
+                <td>
+                  {row.isEditable ? (
+                    <button onClick={() => toggleEdit(index)}>Save</button>
+                  ) : (
+                    <button onClick={() => toggleEdit(index)}>Edit</button>
+                  )}
                 </td>
               </tr>
             ))}
