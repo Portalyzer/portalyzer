@@ -20,6 +20,22 @@ function App() {
     setRows(updatedRows)
   }
 
+  const saveTableData = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/save-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(rows), // Send the table data
+      })
+      const result = await response.json()
+      console.log('Response from backend:', result)
+    } catch (error) {
+      console.error('Error sending data to backend:', error)
+    }
+  }
+
   return (
     <>
       <h1>Stock Portfolio</h1>
@@ -78,6 +94,7 @@ function App() {
           </tbody>
         </table>
         <button onClick={addRow}>Add Row</button>
+        <button onClick={saveTableData}>Save Table Data</button>
       </div>
     </>
   )
