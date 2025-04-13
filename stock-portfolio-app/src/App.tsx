@@ -38,65 +38,7 @@ function App() {
   }
 
   return (
-    <> 
-      <h1>Stock Portfolio</h1>
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Stock</th>
-              <th>Purchase Date</th>
-              <th>Value of Purchase</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                <td>
-                  <input
-                    type="text"
-                    value={row.symbol}
-                    onChange={(e) =>
-                      handleInputChange(index, 'symbol', e.target.value)
-                    }
-                    disabled={!row.isEditable}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="date"
-                    value={row.date}
-                    onChange={(e) =>
-                      handleInputChange(index, 'date', e.target.value)
-                    }
-                    disabled={!row.isEditable}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={row.value}
-                    onChange={(e) =>
-                      handleInputChange(index, 'value', e.target.value)
-                    }
-                    disabled={!row.isEditable}
-                  />
-                </td>
-                <td>
-                  {row.isEditable ? (
-                    <button onClick={() => toggleEdit(index)}>Save</button>
-                  ) : (
-                    <button onClick={() => toggleEdit(index)}>Edit</button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button onClick={addRow}>Add Row</button>
-        <button onClick={saveTableData}>Save Table Data</button>
-      </div>
+    <>
       <h1>Stock Portfolio App</h1>
       {/* Tab Navigation */}
       <div className="tabs">
@@ -170,6 +112,7 @@ function App() {
             </tbody>
           </table>
           <button onClick={addRow}>Add Row</button>
+          <button onClick={saveTableData}>Save Table Data</button>
         </>
       )}
       {activeTab === 'graphs' && (
