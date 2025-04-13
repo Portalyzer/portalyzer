@@ -3,6 +3,7 @@ import './App.css'
 
 function App() {
   const [rows, setRows] = useState([{ symbol: '', date: '', value: '', isEditable: true }])
+  const [activeTab, setActiveTab] = useState('portfolio');
 
   const handleInputChange = (index: number, field: 'symbol' | 'date' | 'value', value: string) => {
     const updatedRows = [...rows]
@@ -37,7 +38,7 @@ function App() {
   }
 
   return (
-    <>
+    <> 
       <h1>Stock Portfolio</h1>
       <div>
         <table>
@@ -96,8 +97,89 @@ function App() {
         <button onClick={addRow}>Add Row</button>
         <button onClick={saveTableData}>Save Table Data</button>
       </div>
-    </>
+      <h1>Stock Portfolio App</h1>
+      {/* Tab Navigation */}
+      <div className="tabs">
+        <button
+          className={activeTab === 'portfolio' ? 'active' : ''}
+          onClick={() => setActiveTab('portfolio')}
+        >
+          Portfolio
+        </button>
+        <button
+          className={activeTab === 'graphs' ? 'active' : ''}
+          onClick={() => setActiveTab('graphs')}
+        >
+          Graphs
+        </button>
+      </div>
+      <div className = "tab-content">
+        {activeTab === 'portfolio' && (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th>Stock</th>
+                <th>Purchase Date</th>
+                <th>Value of Purchase</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, index) => (
+                <tr key={index}>
+                  <td>
+                    <input
+                      type="text"
+                      value={row.symbol}
+                      onChange={(e) =>
+                        handleInputChange(index, 'symbol', e.target.value)
+                      }
+                      disabled={!row.isEditable}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="date"
+                      value={row.date}
+                      onChange={(e) =>
+                        handleInputChange(index, 'date', e.target.value)
+                      }
+                      disabled={!row.isEditable}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={row.value}
+                      onChange={(e) =>
+                        handleInputChange(index, 'value', e.target.value)
+                      }
+                      disabled={!row.isEditable}
+                    />
+                  </td>
+                  <td>
+                    {row.isEditable ? (
+                      <button onClick={() => toggleEdit(index)}>Save</button>
+                    ) : (
+                      <button onClick={() => toggleEdit(index)}>Edit</button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button onClick={addRow}>Add Row</button>
+        </>
+      )}
+      {activeTab === 'graphs' && (
+        <div className="graphs">
+          <h2>Graphs</h2>
+          <p>Neat simulations are made here.</p>
+        </div>
+      )}
+    </div>
+  </>
   )
 }
-
-export default App
+export default App;
