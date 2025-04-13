@@ -71,9 +71,16 @@ function App() {
     ]
 
     const layout = {
-      title: 'Risk Contribution by Asset',
-      height: 400,
-      width: 500,
+      title: {
+        text:'Risk Contribution by Asset',
+        font: {
+          family: 'Courier New, monospace',
+          size: 16
+        },
+        xref: "paper" as const,
+        x: 0.05,
+      },
+      
     }
 
     plotly.newPlot('myDiv', data, layout)
@@ -92,13 +99,39 @@ function App() {
     }
 
     const layout = {
-      title: 'Simulated Portfolio Return Distribution',
-      xaxis: { title: 'Return Bins' },
-      yaxis: { title: 'Frequency' },
+      title: {
+        text:'Simulated Portfolio Return Distribution',
+        font: {
+          family: 'Courier New, monospace',
+          size: 16
+        },
+        xref: "paper" as const,
+        x: 0.05,
+      },
+      xaxis: {
+        title: {
+          text: 'Return Bins',
+          font: {
+            family: 'Courier New, monospace',
+            size: 14,
+            color: '#7f7f7f'
+          }
+        },
+      },
+      yaxis: {
+        title: {
+          text: 'Frequency',
+          font: {
+            family: 'Courier New, monospace',
+            size: 14,
+            color: '#7f7f7f'
+          }
+        }
+      }
     }
-
     plotly.newPlot('myDiv', [trace], layout)
   }
+  
 
   const saveTableData = async () => {
     for (let i = 0; i < rows.length; i++) {
@@ -151,11 +184,29 @@ function App() {
             console.log("Fetched data:", data)
             setTickers(data.tickers || [])
             setContributions(data.contributions || [])
-            setHistogramData(data.histogram || { x: [], y: [] })
           }
         })
         .catch(err => {
           alert('Error connecting to backend for risk data.')
+          console.error(err)
+        })
+    }
+  }, [activeTab])
+
+  useEffect(() => {
+    if (activeTab === 'graphs') {
+      fetch('http://127.0.0.1:5000/simulate_gbm_paths')
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            alert(`Backend error: ${data.error}`)
+          } else {
+            console.log("Fetched histogram data:", data)
+            setHistogramData(data.histogram || { x: [], y: [] })
+          }
+        })
+        .catch(err => {
+          alert('Error connecting to backend for histogram data.')
           console.error(err)
         })
     }

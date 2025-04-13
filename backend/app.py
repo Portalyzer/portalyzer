@@ -120,7 +120,28 @@ def get_risk_contributions():
     except Exception as e:
         return jsonify({"error": str(e)})
 
-def simulate_gbm_paths(weights, mu, sigma, L, S0, n_assets, T=1, N=252, M=10000):
+@app.route('/simulate_gbm_paths', methods=['GET'])
+def simulate_gbm_paths_endpoint():
+    try:
+        # Generate histogram data
+        tickers, cov_matrix, mu, sigma, L, S0, n_assets = make_vars()
+        weights = np.ones(n_assets) / n_assets  # Example: Equal weights for all assets
+        portfolio_values, _ = simulate_gbm_paths(weights, mu, sigma, L, S0, n_assets)
+        hist_data, bins = np.histogram(portfolio_values[:,-1], bins=50)
+        histogram = {
+            "x": bins[:-1].tolist(),
+            "y": hist_data.tolist()
+        }
+
+        # Response
+        response = {
+            "histogram": histogram
+        }
+        return jsonify(response)
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    
+def simulate_gbm_paths(weights, mu, sigma, L, S0, n_assets, T=1, N=252, M=1000):
     dt = T / N
     weights = np.array(weights)
     simulated_prices = np.zeros((M, N, n_assets))
@@ -158,6 +179,5 @@ def portfolio_decomposition(weights, cov_matrix, tickers, portfolio_values):
         risk_contributions[asset]['contribution_percent'] = 100 * tcv_i / total_risk_contribution
 
     return risk_contributions
-    portfolio = simulate_gbm_paths(weights, mu, sigma, L, S0, n_assets, T=1, N=252, M=10000)
 if __name__ == '__main__':
     app.run(debug=True)
