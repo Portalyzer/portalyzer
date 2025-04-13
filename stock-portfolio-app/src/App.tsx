@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import plotly from 'plotly.js-dist-min'
 import './App.css'
-import plotly from 'react-plotly.js'
 import { validStocks } from './valid_stocks'
 
 function App() {
