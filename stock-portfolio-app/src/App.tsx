@@ -1,11 +1,15 @@
+import { useEffect } from 'react'
 import { useState } from 'react'
 import plotly from 'plotly.js-dist-min'
 import './App.css'
+import plotly from 'react-plotly.js'
 import { validStocks } from './valid_stocks'
 
 function App() {
   const [rows, setRows] = useState([{ symbol: '', date: '', value: '', isEditable: true }])
   const [activeTab, setActiveTab] = useState('portfolio');
+  const [tickers, setTickers] = useState<string[]>([]);
+  const [contributions, setContributions] = useState<number[]>([]);
 
   const handleInputChange = (index: number, field: 'symbol' | 'date' | 'value', value: string) => {
     const updatedRows = [...rows]
@@ -127,7 +131,8 @@ function App() {
       alert('Failed to save table data. Please try again.')
     }
   }
-
+ 
+ 
   return (
     <>
       <h1>Portalyzer</h1>
@@ -223,3 +228,5 @@ function App() {
   )
 }
 export default App;
+
+
